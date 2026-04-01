@@ -3,15 +3,16 @@
 Job-Outreach CLI — AI-powered outreach pipeline.
 
 Commands:
-  discover    Autonomously crawl YC, RemoteOK, HN Hiring, UK tech, Workable, Wellfound
-  shortlist   Score all cached + bootstrap companies against your CV, print ranked matches
-  cache       Show discovery cache statistics
-  research    Scrape and analyse a specific company
-  draft       Generate a personalised LinkedIn/email message (email includes Gmail compose link)
-  pipeline    Research + draft both channels in one shot (includes Gmail compose link)
-  add         Log a sent outreach to the tracker
-  followups   Show (and optionally mark) pending follow-ups
-  status      Print tracker stats
+  discover      Autonomously crawl YC, RemoteOK, HN Hiring, UK tech, Workable, Wellfound
+  shortlist     Score all cached + bootstrap companies against your CV, print ranked matches
+  cache         Show discovery cache statistics
+  research      Scrape and analyse a specific company
+  draft         Generate a personalised LinkedIn/email message (email includes Gmail compose link)
+  pipeline      Research + draft both channels in one shot (includes Gmail compose link)
+  add           Log a sent outreach to the tracker
+  followups     Show (and optionally mark) pending follow-ups
+  status        Print tracker stats
+  agencies      Discover UK AI recruitment agencies, score them, draft registration emails
 
 Examples:
   python main.py discover                               # crawl all sources
@@ -25,6 +26,8 @@ Examples:
   python main.py add "Jordan" "Founder" "Vapi AI" linkedin
   python main.py followups --mark
   python main.py status
+  python main.py agencies                               # discover + rank agencies + draft emails
+  python main.py agencies --fresh --topk 25 --no-emails
 """
 import json
 import re
@@ -423,6 +426,40 @@ def status():
                 "[green]yes[/green]" if r["follow_up_sent"] else "[red]no[/red]",
             )
         console.print(t2)
+
+
+@cli.command()
+@click.option("--fresh",      is_flag=True,  help="Ignore cache, re-fetch all agencies.")
+@click.option("--topk",       default=15,    show_default=True, help="Max agencies to show.")
+@click.option("--min-score",  default=6,     show_default=True, help="Minimum LLM relevance score (0-10).")
+@click.option("--no-emails",  is_flag=True,  help="Skip email drafting (faster, table only).")
+@click.option("--to",         "recipient_email", default="", help="Pre-fill Gmail compose links with this address.")
+def agencies(fresh: bool, topk: int, min_score: int, no_emails: bool, recipient_email: str):
+    """Discover UK AI recruitment agencies, score by relevance, draft registration emails.
+
+    Fires 25+ search queries at DuckDuckGo, scrapes each result, uses an LLM to score
+    relevance for your profile (AI engineer, Glasgow/remote UK), then generates a
+    personalised registration email and Gmail compose link for every agency above the
+    score threshold.
+
+    Results are cached in data/agency_cache.json — subsequent runs are fast.
+
+    Examples:\n
+      python main.py agencies                           # full run, score ≥6\n
+      python main.py agencies --fresh --topk 25        # re-fetch + show more\n
+      python main.py agencies --no-emails              # just the ranked table\n
+      python main.py agencies --min-score 8            # only top-tier agencies
+    """
+    from agents.agency_hunter import run_agency_hunter
+
+    console.print(Rule("[bold cyan]Agency Hunter[/bold cyan]"))
+    run_agency_hunter(
+        fresh=fresh,
+        topk=topk,
+        min_score=min_score,
+        draft_emails=not no_emails,
+        recipient_email=recipient_email,
+    )
 
 
 if __name__ == "__main__":
