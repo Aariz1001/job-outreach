@@ -1,0 +1,9 @@
+python-dotenv
+requests
+beautifulsoup4
+PyMuPDF
+numpy
+openai
+click
+rich
+python-docx

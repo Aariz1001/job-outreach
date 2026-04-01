@@ -1,0 +1,55 @@
+# ── Secrets ───────────────────────────────────────────────────────────────────
+.env
+*.env.*
+!*.env.example
+
+# ── Python ────────────────────────────────────────────────────────────────────
+venv/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+.eggs/
+pip-wheel-metadata/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+
+# ── Personal CV files ─────────────────────────────────────────────────────────
+# Never commit real CVs — use a placeholder or export fresh from the tool
+*.docx
+*.pdf
+
+# ── Specialised CVs output ────────────────────────────────────────────────────
+specialised_cvs/
+
+# ── Personal outreach data ────────────────────────────────────────────────────
+# These files contain private research, embeddings of your CV, and outreach logs
+data/company_cache.json
+data/cv_embedding.json
+data/crawl_state.json
+data/shortlist.json
+data/tracker.json
+data/leads.json
+data/research_cache/
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
