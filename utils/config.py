@@ -9,6 +9,7 @@ load_dotenv(Path(__file__).parent.parent / ".env")
 OPENROUTER_API_KEY: str = os.environ["OPENROUTER_API_KEY"]
 GEMINI_API_KEY: str = os.environ["GEMINI_API_KEY"]
 YOUR_EMAIL: str = os.environ.get("YOUR_EMAIL", "")
+YOUR_PHONE: str = os.environ.get("YOUR_PHONE", "")
 
 EMBEDDING_MODEL = "models/gemini-embedding-2-preview"
 GENERATION_MODEL = "x-ai/grok-4.20"   # via OpenRouter

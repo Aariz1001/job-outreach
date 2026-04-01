@@ -35,7 +35,7 @@ from rich.console import Console
 from rich.table import Table
 from rich.rule import Rule
 
-from utils.config import DATA_DIR, GENERATION_MODEL, OPENROUTER_API_KEY
+from utils.config import DATA_DIR, GENERATION_MODEL, OPENROUTER_API_KEY, YOUR_EMAIL, YOUR_PHONE
 from utils.gmail import gmail_compose_link
 
 console = Console()
@@ -59,7 +59,7 @@ _llm = OpenAI(api_key=OPENROUTER_API_KEY, base_url="https://openrouter.ai/api/v1
 CANDIDATE = {
     "name": "Aariz",
     "full_name": "Mohammad Aariz Waqas",
-    "email": "m.aariz.shah@gmail.com",
+    "email": YOUR_EMAIL,
     "location": "Glasgow, UK",
     "role": "AI Engineer",
     "github": "github.com/Aariz1001/job-outreach",
@@ -337,8 +337,10 @@ Rules:
 - Maximum 150 words in the body.
 - Do not use "I am excited to", "I am passionate about", "leverage", "harness", "streamline", "delve", "landscape", "synergies".
 - Open with what the candidate does and has built, not with enthusiasm.
-- Mention the GitHub project (github.com/Aariz1001/job-outreach) as proof of work — it found this agency.
-- End with: name, email, phone placeholder [PHONE], and a note that CV is attached.
+- Include the GitHub project URL (github.com/Aariz1001/job-outreach) as a portfolio link only — do NOT say it found the agency or was used to find this agency.
+- End with: name, then on separate lines the email and phone number exactly as given below. Then a note that CV is attached.
+- Candidate email: {CANDIDATE["email"]}
+- Candidate phone: {YOUR_PHONE if YOUR_PHONE else '[PHONE]'}
 - Tone: confident, direct, brief. The email should make the agency want to call."""
 
     try:
